@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#eef3ef" />
+    <meta name="description" content="估算家庭光伏与储能配置，查看容量、发电量和费用区间。" />
+    <title>向阳 · 光储估算</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="/src/app.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="向阳光储估算首页">
+        <span class="brand-mark" aria-hidden="true">向</span>
+        <span><strong>向阳</strong><small>光储估算</small></span>
+      </a>
+      <nav aria-label="主导航"><a href="#calculator">方案估算</a><a href="#method">计算说明</a></nav>
+      <span class="local-badge"><i></i> 本地计算</span>
+    </header>
+
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">家庭能源 · 初步测算</p>
+          <h1 id="page-title">先看屋顶，<br /><em>再算一笔账。</em></h1>
+          <p class="intro-copy">根据日常用电和可用屋顶面积，估算一套适合继续讨论的光伏与储能方案。</p>
+        </div>
+        <div class="sun-path" aria-hidden="true">
+          <svg viewBox="0 0 420 204" role="img">
+            <path class="sun-orbit" d="M22 176 C95 16 315 10 395 164" />
+            <circle class="sun" cx="315" cy="49" r="22" />
+            <path class="roof" d="M54 151 210 64l157 87v31H54z" />
+            <path class="roof-line" d="m54 151 156 24 157-24M210 64v111M126 105v62m168-63v63" />
+            <path class="panel-lines" d="m85 135 125 19 0-66zm38-21 87 13m-86 4 86 13m83-37v61m-41-67v61m83-47-83-14m83 32-83-13m83 31-83-13" />
+            <path class="ground" d="M20 182h380" />
+          </svg>
+          <span>屋顶条件 × 用电习惯</span>
+        </div>
+      </section>
+
+      <section id="calculator" class="workspace" aria-label="方案估算器">
+        <form id="scenario-form" class="input-panel" novalidate>
+          <div class="panel-heading">
+            <div><p class="eyebrow">方案条件</p><h2>填写基本情况</h2></div>
+            <button id="reset-button" class="text-button" type="button">恢复示例</button>
+          </div>
+
+          <fieldset>
+            <legend>用电情况</legend>
+            <label class="field" for="monthlyKwh"><span>每月用电量</span><span class="input-wrap"><input id="monthlyKwh" name="monthlyKwh" type="number" min="1" max="100000" value="650" required /><b>千瓦时</b></span><small class="field-error" id="monthlyKwh-error"></small></label>
+            <label class="field" for="daytimeUseShare"><span>白天用电比例</span><span class="range-line"><input id="daytimeUseShare" name="daytimeUseShare" type="range" min="0" max="1" step="0.05" value="0.45" /><output id="daytimeUseShare-value">45%</output></span><small class="field-error" id="daytimeUseShare-error"></small></label>
+            <label class="field" for="targetSelfSufficiency"><span>目标供电比例</span><span class="range-line"><input id="targetSelfSufficiency" name="targetSelfSufficiency" type="range" min="0" max="1" step="0.05" value="0.75" /><output id="targetSelfSufficiency-value">75%</output></span><small class="field-error" id="targetSelfSufficiency-error"></small></label>
+          </fieldset>
+
+          <fieldset>
+            <legend>屋顶与日照</legend>
+            <label class="field" for="roofAreaM2"><span>可用屋顶面积</span><span class="input-wrap"><input id="roofAreaM2" name="roofAreaM2" type="number" min="0" max="100000" value="48" required /><b>平方米</b></span><small class="field-error" id="roofAreaM2-error"></small></label>
+            <label class="field" for="annualYield"><span>年等效发电量</span><span class="input-wrap"><input id="annualYield" name="annualYield" type="number" min="500" max="2500" value="1200" required /><b>千瓦时/千瓦</b></span><small class="field-error" id="annualYield-error"></small></label>
+          </fieldset>
+
+          <fieldset>
+            <legend>电价与储能</legend>
+            <label class="field" for="batteryAutonomyHours"><span>希望备用时长</span><span class="input-wrap"><input id="batteryAutonomyHours" name="batteryAutonomyHours" type="number" min="0" max="24" value="6" required /><b>小时</b></span><small class="field-error" id="batteryAutonomyHours-error"></small></label>
+            <div class="paired-fields">
+              <label class="field" for="electricityPrice"><span>购电单价</span><span class="input-wrap"><input id="electricityPrice" name="electricityPrice" type="number" min="0" max="100" step="0.01" value="0.65" required /><b>元/度</b></span><small class="field-error" id="electricityPrice-error"></small></label>
+              <label class="field" for="exportPrice"><span>上网电价</span><span class="input-wrap"><input id="exportPrice" name="exportPrice" type="number" min="0" max="100" step="0.01" value="0.35" required /><b>元/度</b></span><small class="field-error" id="exportPrice-error"></small></label>
+            </div>
+            <label class="field" for="installedCostPerKw"><span>光伏安装单价</span><span class="input-wrap"><input id="installedCostPerKw" name="installedCostPerKw" type="number" min="0" max="1000000" value="4200" required /><b>元/千瓦</b></span><small class="field-error" id="installedCostPerKw-error"></small></label>
+          </fieldset>
+          <button class="primary-button" type="submit">更新方案估算 <span aria-hidden="true">↗</span></button>
+          <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
+        </form>
+
+        <div class="results-column">
+          <section class="capacity-card" aria-labelledby="result-title">
+            <div class="capacity-copy">
+              <p class="eyebrow">建议光伏装机</p>
+              <h2 id="result-title"><span id="pv-capacity">—</span><small>千瓦</small></h2>
+              <p><span id="panel-count">—</span> 块组件 · 按 <span id="roof-area-result">—</span> 平方米屋顶估算</p>
+            </div>
+            <div id="roof-tiles" class="roof-tiles" aria-hidden="true"></div>
+          </section>
+
+          <section class="metric-grid" aria-label="测算结果">
+            <article class="metric-card"><span>预计年发电</span><strong><span id="annual-generation">—</span><small>千瓦时</small></strong><p>按当地等效发电量计算</p></article>
+            <article class="metric-card"><span>建议储能</span><strong><span id="battery-capacity">—</span><small>千瓦时</small></strong><p>基于夜间用电与备用时长</p></article>
+            <article class="metric-card"><span>预计年节省</span><strong><span id="annual-savings">—</span><small>元</small></strong><p>自用与余电上网合计</p></article>
+            <article class="metric-card"><span>静态回收期</span><strong><span id="payback-period">—</span><small>年</small></strong><p>未计融资、维护与衰减</p></article>
+          </section>
+
+          <section class="flow-card" aria-labelledby="flow-title">
+            <div class="section-heading"><div><p class="eyebrow">电量去向</p><h2 id="flow-title">发电与用电估算</h2></div><span class="unit-note">年度 · 千瓦时</span></div>
+            <div class="bar-chart" role="img" id="energy-chart" aria-label="预计发电、自用与上网电量对比">
+              <div class="bar-row"><span>光伏发电</span><div class="bar-track"><i id="generation-bar" class="bar-fill bar-green"></i></div><b id="generation-value">—</b></div>
+              <div class="bar-row"><span>家庭自用</span><div class="bar-track"><i id="self-use-bar" class="bar-fill bar-orange"></i></div><b id="self-use-value">—</b></div>
+              <div class="bar-row"><span>余电上网</span><div class="bar-track"><i id="export-bar" class="bar-fill bar-sage"></i></div><b id="export-value">—</b></div>
+            </div>
+            <div class="bill-line"><span>估算初始投入</span><strong id="estimated-cost">—</strong></div>
+          </section>
+
+          <details id="method" class="method-card">
+            <summary>估算采用了哪些条件？</summary>
+            <p>组件按每块 420 瓦、占地 2.1 平方米估算；储能按 90% 可用容量、88% 往返效率估算。实际发电会受到朝向、遮挡、天气、设备和当地政策影响。</p>
+            <p>此结果用于方案比较。请让专业人员结合屋顶勘测、并网要求和电气规范复核。</p>
+          </details>
+        </div>
+      </section>
+    </main>
+    <footer><span>向阳 · 光储估算</span><span>输入数据仅在本机计算</span></footer>
+  </body>
+</html>
