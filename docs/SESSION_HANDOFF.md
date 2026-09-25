@@ -19,6 +19,8 @@ Current Milestone: M2 中文交互
 - 首版离线运行，不接入模型或第三方运行时包。
 - 确定性计算是容量、发电和收益数字的唯一来源。
 - 项目组合计划保存在被 Git 忽略的 `work/PORTFOLIO_PLAN.md`。
+- 公开源码仓库：`https://github.com/Wang716-tim/solar-storage-planner`；当前发布分支为 `main`。
+- 初始版本提交：`efad91db41d9b1f72b3380c23f29ae05294e4a9e`。
 
 ## Tests
 
@@ -33,11 +35,11 @@ Current Milestone: M2 中文交互
 
 ## Current Blockers
 
-- GitHub 已连接且确认仓库列表为空；可用连接器不支持新建仓库，浏览器无法访问 github.com，目录尚无远程地址。
+- 当前没有阻塞项。
 
 ## Next Recommended Task
 
-在 GitHub 创建空的 `solar-storage-planner` 仓库后设置 `origin` 并推送；如需由 Codex 继续操作，提供仓库 URL。随后完成宽屏视觉检查。
+补充一组标注假设的计算样例，并完成宽屏视觉检查；随后规划 M3 本地方案比较。
 
 ## Commands
 
